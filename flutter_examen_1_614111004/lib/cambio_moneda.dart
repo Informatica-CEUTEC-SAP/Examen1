@@ -7,8 +7,8 @@ class CambioMoneda extends StatefulWidget {
 
 class _CambioMonedaState extends State<CambioMoneda> {
   final _formKey = GlobalKey<FormState>();
-  String _monedaOrigen = 'USD';
-  String _monedaDestino = 'HNL';
+  String _monedaOrigen = 'Lempiras';
+  String _monedaDestino = 'Dólar';
   double _monto = 0.0;
   double _resultado = 0.0;
 
@@ -33,12 +33,16 @@ class _CambioMonedaState extends State<CambioMoneda> {
                 },
                 items: [
                   DropdownMenuItem(
-                    child: Text('USD'),
-                    value: 'USD',
+                    child: Text('Lempiras'),
+                    value: 'Lempiras',
                   ),
                   DropdownMenuItem(
-                    child: Text('EUR'),
-                    value: 'EUR',
+                    child: Text('Dólar'),
+                    value: 'Dólar',
+                  ),
+                  DropdownMenuItem(
+                    child: Text('Euro'),
+                    value: 'Euro',
                   ),
                 ],
               ),
@@ -51,17 +55,23 @@ class _CambioMonedaState extends State<CambioMoneda> {
                 },
                 items: [
                   DropdownMenuItem(
-                    child: Text('HNL'),
-                    value: 'HNL',
+                    child: Text('Lempiras'),
+                    value: 'Lempiras',
                   ),
                   DropdownMenuItem(
-                    child: Text('USD'),
-                    value: 'USD',
+                    child: Text('Dólar'),
+                    value: 'Dólar',
+                  ),
+                  DropdownMenuItem(
+                    child: Text('Euro'),
+                    value: 'Euro',
                   ),
                 ],
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Monto'),
+                decoration: InputDecoration(
+                  labelText: 'Monto',
+                ),
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Ingrese un monto';
@@ -75,11 +85,12 @@ class _CambioMonedaState extends State<CambioMoneda> {
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     _formKey.currentState.save();
-                    _calcularCambio();
+                    _calcularCambioMoneda();
                   }
                 },
                 child: Text('Calcular'),
               ),
+              SizedBox(height: 20),
               Text(
                 'Resultado: ${_resultado.toStringAsFixed(2)}',
                 style: TextStyle(fontSize: 24),
@@ -91,26 +102,20 @@ class _CambioMonedaState extends State<CambioMoneda> {
     );
   }
 
-    Map<String, double> _conversiónMoneda = {
-  'USD_HNL': 24.50, // 1 USD = 24.50 HNL
-  'EUR_HNL': 28.50, // 1 EUR = 28.50 HNL
-  'HNL_USD': 0.040, // 1 HNL = 0.040 USD
-  'HNL_EUR': 0.035, // 1 HNL = 0.035 EUR
-  'USD_EUR': 0.88, // 1 USD = 0.88 EUR
-  'EUR_USD': 1.13, // 1 EUR = 1.13 USD
-};
-
-  void _calcularCambio() {
-  String key = '${_monedaOrigen}_${_monedaDestino}';
-  double tasaCambio = _conversiónMoneda[key];
-
-  if (tasaCambio != null) {
-    _resultado = _monto * tasaCambio;
-  } else {
-    _resultado = 0.0;
+  void _calcularCambioMoneda() {
+    if (_monedaOrigen == 'Lempiras' && _monedaDestino == 'Dólar') {
+      _resultado = _monto / 24.5;
+    } else if (_monedaOrigen == 'Lempiras' && _monedaDestino == 'Euro') {
+      _resultado = _monto / 28.5;
+    } else if (_monedaOrigen == 'Dólar' && _monedaDestino == 'Lempiras') {
+      _resultado = _monto * 24.5;
+    } else if (_monedaOrigen == 'Dólar' && _monedaDestino == 'Euro') {
+      _resultado = _monto * 0.84;
+    } else if (_monedaOrigen == 'Euro' && _monedaDestino == 'Lempiras') {
+      _resultado = _monto * 28.5;
+    } else if (_monedaOrigen == 'Euro' && _monedaDestino == 'Dólar') {
+      _resultado = _monto / 0.84;
+    }
+    setState(() {});
   }
-
-  setState(() {});
-}
-
 }
