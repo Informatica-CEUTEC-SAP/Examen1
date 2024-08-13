@@ -10,10 +10,12 @@ class ListaTareas extends StatelessWidget {
       body: ListView.builder(
         itemCount: 10,
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Text('Tarea ${index + 1}'),
-            subtitle: Text('Descripción de la tarea ${index + 1}'),
-            trailing: Icon(Icons.check_circle),
+          return Card(
+            child: ListTile(
+              title: Text('Tarea ${index + 1}'),
+              subtitle: Text('Descripción de la tarea ${index + 1}'),
+              trailing: Icon(Icons.check_circle),
+            ),
           );
         },
       ),
